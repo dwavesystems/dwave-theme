@@ -1,0 +1,16 @@
+# Font Stack
+font.family: sans-serif
+font.sans-serif: Open Sans, Arial, Helvetica, DejaVu Sans, sans-serif
+
+# Sizes
+font.size: 12
+axes.labelsize: 12
+axes.labelweight: bold
+xtick.labelsize: 11
+ytick.labelsize: 11
+
+# Titles
+axes.titlelocation: left
+axes.titlepad: 15
+axes.titlesize: 16
+axes.titleweight: bold

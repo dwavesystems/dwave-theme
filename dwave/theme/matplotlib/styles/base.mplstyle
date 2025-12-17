@@ -1,27 +1,19 @@
 # Spines & Lines
-axes.linewidth: 1.0
 axes.spines.top: False
 axes.spines.right: False
+axes.spines.left: True
+axes.spines.bottom: True
 lines.linewidth: 2.0
 lines.solid_capstyle: round
 
 # Grid
 axes.grid: False
-axes.axisbelow: True
+axes.axisbelow: True 
 
-# Font Stack
-font.family: sans-serif
-font.sans-serif: Open Sans, Arial, Helvetica, DejaVu Sans, sans-serif
-axes.labelsize: 15
-axes.labelweight: bold
-xtick.labelsize: 12
-ytick.labelsize: 12
-
-# Title
-axes.titlelocation: left
-axes.titlepad: 20
-axes.titlesize: 20
-axes.titleweight: bold
+# Figure
+figure.figsize: 10, 7
+figure.dpi: 300
+figure.autolayout: True
 
 # Ticks
 xtick.major.size: 5
@@ -33,10 +25,6 @@ ytick.direction: out
 xtick.major.pad: 5
 ytick.major.pad: 5
 
-# Figure
-figure.figsize: 10, 7
-figure.dpi: 300
-
 # Saving
 savefig.dpi: 300
 savefig.bbox: tight
@@ -45,3 +33,4 @@ savefig.pad_inches: 0.2
 # Legend
 legend.frameon: False
 legend.loc: best
+legend.fontsize: 11

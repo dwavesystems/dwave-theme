@@ -1,11 +1,29 @@
-[project]
-name = "dwave-theme"
-version = "0.1.0"
-description = "A centralized theme and configuration package for D-Wave projects."
-readme = "README.rst"
-requires-python = ">=3.9"
-dependencies = ["matplotlib>=3.10.6"]
-
 [build-system]
 requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "dwave-theme"
+version = "0.1.0"
+authors = [
+    {name = "D-Wave Inc.", email = "tools@dwavesys.com"},
+]
+license = "Apache-2.0"
+license-files = ["LICEN[CS]E*"]
+description = "A centralized theme and configuration package for D-Wave projects."
+readme = {file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.10"
+dependencies = [
+    "cycler>=0.12.1",
+    "matplotlib>=3.10.6",
+]
+
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-mock"
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.mplstyle"]
+

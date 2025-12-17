@@ -1,0 +1,23 @@
+# 16:9 Aspect Ratio
+figure.figsize: 12.8, 7.2  
+
+# Typography
+font.size: 16
+axes.titlesize: 24
+axes.labelsize: 18
+xtick.labelsize: 14
+ytick.labelsize: 14
+legend.fontsize: 14
+
+# Visibility
+lines.linewidth: 3.5
+lines.markersize: 12
+axes.linewidth: 2.0
+xtick.major.width: 2.0
+ytick.major.width: 2.0
+
+# Padding
+axes.titlepad: 25
+axes.labelpad: 10
+xtick.major.pad: 10
+ytick.major.pad: 10
