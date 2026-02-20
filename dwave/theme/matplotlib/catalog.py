@@ -24,12 +24,12 @@ STYLE_DIR = Path(__file__).parent / "styles"
 def build_catalog() -> dict[str, Any]:
     """Constructs the dictionary of all available style components.
 
-    This mixes static `.mplstyle` files with dynamic dictionaries generated from the core color
+    This mixes static ``.mplstyle`` files with dynamic dictionaries generated from the core color
     definitions.
 
     Returns:
-        dict[str, Any]: A registry where keys are style names and values are either `Path` objects
-            (to `.mplstyle` files) or dictionaries (`rcParams`).
+        dict[str, Any]: A registry where keys are style names and values are either ``Path`` objects
+            (to ``.mplstyle`` files) or dictionaries (``rcParams``).
     """
     catalog = {}
 

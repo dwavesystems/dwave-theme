@@ -12,28 +12,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
+import pytest
+
 from dwave.theme.core.colors import PALETTES, THEMES
 
 
-def test_palettes_structure():
-    """Ensure palettes are defined correctly."""
-    assert "qualitative" in PALETTES
-    assert "light" in PALETTES["qualitative"]
-    assert "dark" in PALETTES["qualitative"]
-
-    light_palette = PALETTES["qualitative"]["light"]
-    assert isinstance(light_palette, list)
-    assert len(light_palette) > 0
-    assert light_palette[0].startswith("#")
+# A regex to ensure valid hex codes. Allows for optional transparency too, see:
+# https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
+HEX_COLOR_PATTERN = re.compile(r"^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$")
 
 
-def test_themes_structure():
-    """Ensure UI themes have the required keys."""
-    required_keys = ["figure.facecolor", "axes.facecolor", "text.color"]
+@pytest.mark.parametrize("palette_type", ["qualitative", "sequential"])
+@pytest.mark.parametrize("variant", ["light", "dark"])
+def test_palettes_structure(palette_type, variant):
+    """Ensure palettes exist and contain hex colors."""
 
-    for variant in ["light", "dark"]:
-        assert variant in THEMES
-        theme_dict = THEMES[variant]
+    assert palette_type in PALETTES
+    assert variant in PALETTES[palette_type]
 
-        for key in required_keys:
-            assert key in theme_dict, f"Theme '{variant}' missing key '{key}'"
+    color_list = PALETTES[palette_type][variant]
+    assert isinstance(color_list, list)
+    assert len(color_list) > 0
+
+    for i, color in enumerate(color_list):
+        assert isinstance(color, str)
+        assert HEX_COLOR_PATTERN.match(color)
+
+
+@pytest.mark.parametrize("variant", ["light", "dark"])
+def test_themes_structure(variant):
+    """Ensure UI themes have the required keys and valid color values."""
+    required_keys = [
+        "figure.facecolor",
+        "axes.facecolor",
+        "text.color",
+        "axes.labelcolor",
+        "xtick.color",
+        "ytick.color",
+        "grid.color",
+        "axes.edgecolor",
+    ]
+
+    assert variant in THEMES
+    theme_dict = THEMES[variant]
+
+    for key in required_keys:
+        assert key in theme_dict, f"Theme '{variant}' missing key '{key}'"
+
+    assert len(theme_dict) == len(required_keys)
+
+    for key, color_value in theme_dict.items():
+        assert isinstance(color_value, str)
+        assert HEX_COLOR_PATTERN.match(color_value)

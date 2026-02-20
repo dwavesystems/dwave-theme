@@ -15,30 +15,78 @@
 import pytest
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from cycler import Cycler
 
-from dwave.theme.core.colors import _LIGHT_BG_PLOT, _DARK_BG_PLOT, _DARK_TEXT_PRIMARY
+from dwave.theme.core.colors import (
+    _LIGHT_BG_PLOT,
+    _DARK_BG_PLOT,
+    _DARK_TEXT_PRIMARY,
+    PALETTES,
+    THEMES,
+)
 from dwave.theme.matplotlib import available_styles, set_theme, context, show_palettes
 from dwave.theme.matplotlib.catalog import build_catalog
 
 
-def test_catalog_builds_correctly():
-    """Verify the catalog loads static files, themes, and palettes."""
+def test_catalog_loads_static_files():
+    """Verify ``.mplstyle`` files are discovered and loaded into the catalog."""
+    catalog = build_catalog()
+    mpl_static = ["base", "presentation", "transparent", "typography"]
+
+    for style in mpl_static:
+        assert style in catalog, f"Style '{style}' is missing from the catalog."
+
+
+def test_catalog_loads_themes():
+    """Verify themes are correctly loaded into the catalog."""
     catalog = build_catalog()
 
-    assert "base" in catalog
-    assert "typography" in catalog
+    for theme_name in THEMES.keys():
+        assert f"theme-{theme_name}" in catalog, (
+            f"Theme theme-{theme_name} failed to load."
+        )
 
-    assert "theme-light" in catalog
-    assert "theme-dark" in catalog
 
-    assert "palette-qualitative-light" in catalog
+def test_catalog_loads_palettes():
+    """Verify all palettes are loaded with valid Matplotlib Cyclers."""
+    catalog = build_catalog()
 
-    assert "default" in catalog
-    assert isinstance(catalog["default"], list)
+    for kind, variants in PALETTES.items():
+        for variant in variants.keys():
+            expected_key = f"palette-{kind}-{variant}"
+
+            assert expected_key in catalog, f"Palette {expected_key} failed to load."
+
+            palette_dict = catalog[expected_key]
+            assert "axes.prop_cycle" in palette_dict, (
+                f"Palette {expected_key} missing color cycler."
+            )
+
+            prop_cycle = palette_dict["axes.prop_cycle"]
+            assert isinstance(prop_cycle, Cycler), "Expected a Cycler object."
+
+
+@pytest.mark.parametrize(
+    "preset_name", ["default", "dark", "presentation", "presentation-dark"]
+)
+def test_presets_reference_valid_components(preset_name):
+    """Ensure that all values inside a preset list reference a valid component."""
+    catalog = build_catalog()
+
+    assert preset_name in catalog
+
+    preset_components = catalog[preset_name]
+    assert isinstance(preset_components, list)
+
+    for component in preset_components:
+        assert component in catalog, (
+            f"Preset '{preset_name}' relies on component '{component}', "
+            f"but '{component}' is not in the catalog."
+        )
 
 
 def test_available_styles_returns_sorted_list():
-    """Test that `available_styles()` returns a sorted list of style names."""
+    """Test that ``available_styles()`` returns a sorted list of style names."""
     styles = available_styles()
     assert isinstance(styles, list)
     assert "default" in styles
@@ -59,10 +107,9 @@ def test_set_theme_dark_preset():
 
 def test_set_theme_invalid_name():
     """Test that a ValueError is raised for bad style names."""
-    with pytest.raises(ValueError) as excinfo:
+    expected_error = "Style 'non_existent_style' not found"
+    with pytest.raises(ValueError, match=expected_error):
         set_theme("non_existent_style")
-
-    assert "Style 'non_existent_style' not found" in str(excinfo.value)
 
 
 def test_set_theme_composition():
@@ -71,12 +118,6 @@ def test_set_theme_composition():
 
     assert plt.rcParams["axes.grid"] is False
     assert plt.rcParams["figure.facecolor"] == _LIGHT_BG_PLOT
-
-
-def test_catalog_has_transparent():
-    """Ensure the transparent component is discovered."""
-    catalog = build_catalog()
-    assert "transparent" in catalog
 
 
 def test_transparent_style_application():
@@ -114,13 +155,9 @@ def test_show_palettes_runs_without_error(mocker):
     Smoke test the palette visualizer.
     """
     mpl.use("Agg")
-
     mock_show = mocker.patch("matplotlib.pyplot.show")
 
-    try:
-        show_palettes()
-    except Exception as e:
-        pytest.fail(f"show_palettes raised an exception: {e}")
+    show_palettes()
 
     mock_show.assert_called_once()
 
@@ -130,10 +167,7 @@ def test_show_palettes_filtered(mocker):
     mpl.use("Agg")
     mocker.patch("matplotlib.pyplot.show")
 
-    try:
-        show_palettes("qualitative")
-    except Exception as e:
-        pytest.fail(f"show_palettes('qualitative') raised: {e}")
+    show_palettes("qualitative")
 
 
 def test_show_palettes_invalid_category():

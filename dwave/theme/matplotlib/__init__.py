@@ -24,11 +24,10 @@ _CATALOG = build_catalog()
 
 
 def available_styles() -> list[str]:
-    """
-    Returns a sorted list of all valid style names (both presets and components).
+    """Returns a sorted list of all valid style names (both presets and components).
 
     Returns:
-        list[str]: A list of strings that can be passed to `set_theme()` or `context()`.
+        list[str]: A list of strings that can be passed to ``set_theme()`` or ``context()``.
     """
     return sorted(list(_CATALOG.keys()))
 
@@ -40,7 +39,7 @@ def _resolve_styles(names: tuple[str, ...]) -> list[str | dict[str, Any]]:
         names: A tuple of style names.
 
     Returns:
-        resolved: A list of paths or `rcParam` dicts ready for matplotlib.
+        resolved: A list of paths or ``rcParam`` dicts ready for matplotlib.
 
     Raises:
         ValueError: If a name is not found in the catalog.
@@ -64,8 +63,7 @@ def _resolve_styles(names: tuple[str, ...]) -> list[str | dict[str, Any]]:
 
 
 def set_theme(*names: str) -> None:
-    """
-    Applies the D-Wave theme globally to the matplotlib session.
+    """Applies the D-Wave theme globally to the matplotlib session.
 
     This resets the existing matplotlib state to 'fast' before applying the requested styles to
     ensure a clean state.
@@ -99,8 +97,7 @@ def set_theme(*names: str) -> None:
 
 
 def context(*names: str):
-    """
-    Context manager for temporary styling.
+    """Context manager for temporary styling.
 
     Useful for generating a specific plot (e.g., for export) without changing the global state
     of the notebook or script.
