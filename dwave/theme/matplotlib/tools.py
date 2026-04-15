@@ -59,11 +59,11 @@ def show_palettes(category: str | None = None) -> None:
         if category not in PALETTES:
             raise ValueError(
                 f"Palette category '{category}' not found. "
-                f"Available: {sorted(list(PALETTES.keys()))}"
+                f"Available: {sorted(PALETTES.keys())}"
             )
         target_cats = [category]
     else:
-        target_cats = sorted(list(PALETTES.keys()))
+        target_cats = sorted(PALETTES.keys())
 
     plot_list = []
     for cat in target_cats:

@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pathlib import Path
+from importlib import resources
 from typing import Any
+
 from cycler import cycler
+import matplotlib
+
 from dwave.theme.core.colors import PALETTES, THEMES
 
 
-STYLE_DIR = Path(__file__).parent / "styles"
+STYLE_RESOURCE = resources.files(__package__) / "styles"
 
 
 def build_catalog() -> dict[str, Any]:
@@ -31,11 +34,13 @@ def build_catalog() -> dict[str, Any]:
         dict[str, Any]: A registry where keys are style names and values are either ``Path`` objects
             (to ``.mplstyle`` files) or dictionaries (``rcParams``).
     """
-    catalog = {}
+    catalog: dict[str, Any] = {}
 
-    if STYLE_DIR.exists():
-        for path in STYLE_DIR.glob("*.mplstyle"):
-            catalog[path.stem] = path
+    if STYLE_RESOURCE.is_dir():
+        for resource in STYLE_RESOURCE.iterdir():
+            if resource.is_file() and resource.name.endswith(".mplstyle"):
+                name = resource.name.removesuffix(".mplstyle")
+                catalog[name] = _load_mplstyle_resource(resource)
 
     for name, settings in THEMES.items():
         catalog[f"theme-{name}"] = settings
@@ -72,3 +77,9 @@ def build_catalog() -> dict[str, Any]:
     ]
 
     return catalog
+
+
+def _load_mplstyle_resource(resource: Any) -> dict[str, Any]:
+    """Loads a packaged ``.mplstyle`` resource into an ``rcParams`` dictionary."""
+    with resources.as_file(resource) as path:
+        return dict(matplotlib.rc_params_from_file(path, use_default_template=False))

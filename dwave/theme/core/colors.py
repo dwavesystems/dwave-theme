@@ -17,7 +17,7 @@
 # Primary Colors
 _BRAND_MEDIUM_BLUE = "#2A7DE1"
 _BRAND_MEDIUM_ORANGE = "#F37820"
-_BRAND_MEDIUM_TEAL = "#17BEBB"
+_BRAND_MEDIUM_GREEN = "#17BEBB"
 _BRAND_DARK_GRAY = "#222222"
 _BRAND_DARK_BLUE = "#074C91"
 
@@ -25,7 +25,7 @@ _BRAND_DARK_BLUE = "#074C91"
 _BRAND_BRIGHT_BLUE = "#03B8FF"
 _BRAND_DARK_ORANGE = "#AF4904"
 _BRAND_DARK_GREEN = "#008C82"
-_BRAND_LIGHT_MAGENTA = "#FF81E1"
+_BRAND_LIGHT_PINK = "#FF81E1"
 _BRAND_MEDIUM_PINK = "#E83E8C"
 _BRAND_BRIGHT_GRAY = "#F0F0F0"
 
@@ -50,25 +50,25 @@ PALETTES: dict[str, dict[str, list[str]]] = {
         "light": [
             _BRAND_MEDIUM_BLUE,
             _BRAND_MEDIUM_ORANGE,
-            _BRAND_MEDIUM_TEAL,
+            _BRAND_MEDIUM_GREEN,
             _BRAND_DARK_GRAY,
             _BRAND_DARK_BLUE,
             _BRAND_BRIGHT_BLUE,
             _BRAND_MEDIUM_PINK,
             _BRAND_DARK_ORANGE,
-            _BRAND_LIGHT_MAGENTA,
+            _BRAND_LIGHT_PINK,
             _BRAND_DARK_GREEN,
         ],
         "dark": [
             _BRAND_MEDIUM_BLUE,
             _BRAND_MEDIUM_ORANGE,
-            _BRAND_MEDIUM_TEAL,
+            _BRAND_MEDIUM_GREEN,
             _BRAND_BRIGHT_GRAY,
             _BRAND_DARK_BLUE,
             _BRAND_BRIGHT_BLUE,
             _BRAND_MEDIUM_PINK,
             _BRAND_DARK_ORANGE,
-            _BRAND_LIGHT_MAGENTA,
+            _BRAND_LIGHT_PINK,
             _BRAND_DARK_GREEN,
         ],
     },

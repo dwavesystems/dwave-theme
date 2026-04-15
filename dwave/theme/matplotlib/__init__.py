@@ -29,7 +29,7 @@ def available_styles() -> list[str]:
     Returns:
         list[str]: A list of strings that can be passed to ``set_theme()`` or ``context()``.
     """
-    return sorted(list(_CATALOG.keys()))
+    return sorted(_CATALOG.keys())
 
 
 def _resolve_styles(names: tuple[str, ...]) -> list[str | dict[str, Any]]:
