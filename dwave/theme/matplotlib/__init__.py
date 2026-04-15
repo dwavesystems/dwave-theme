@@ -76,7 +76,7 @@ def set_theme(*names: str) -> None:
         ValueError: If a provided style name is not recognized.
 
     Examples:
-        >>> # Apply the standard dwave look
+        >>> # Apply the standard D-Wave look
         >>> import dwave.theme.matplotlib as dwave_theme
         >>> dwave_theme.set_theme()
 
