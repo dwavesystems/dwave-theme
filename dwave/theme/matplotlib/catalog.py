@@ -58,6 +58,8 @@ def build_catalog() -> dict[str, Any]:
         "palette-qualitative-light",
     ]
 
+    catalog["light"] = catalog["default"].copy()
+
     catalog["dark"] = ["base", "typography", "theme-dark", "palette-qualitative-dark"]
 
     catalog["presentation"] = [
