@@ -70,7 +70,7 @@ def set_theme(*names: str) -> None:
 
     Args:
         *names: Variable length argument list of style names.
-                If no arguments are provided, the 'default' preset is applied.
+            If no arguments are provided, the 'default' preset is applied.
 
     Raises:
         ValueError: If a provided style name is not recognized.
@@ -104,7 +104,7 @@ def context(*names: str):
 
     Args:
         *names: Variable length argument list of style names.
-                If empty, uses 'default'.
+            If empty, uses 'default'.
 
     Returns:
         A matplotlib style context manager.

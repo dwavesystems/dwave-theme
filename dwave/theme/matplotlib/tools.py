@@ -41,7 +41,7 @@ def show_palettes(category: str | None = None) -> None:
 
     Args:
         category: The specific palette category to show (e.g., 'qualitative').
-                  If ``None``, shows all available categories.
+            If ``None``, shows all available categories.
 
     Raises:
         ValueError: If the provided category does not exist in the core definitions.

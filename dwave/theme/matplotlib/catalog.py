@@ -32,7 +32,7 @@ def build_catalog() -> dict[str, Any]:
 
     Returns:
         dict[str, Any]: A registry where keys are style names and values are either ``Path`` objects
-            (to ``.mplstyle`` files) or dictionaries (``rcParams``).
+        (to ``.mplstyle`` files) or dictionaries (``rcParams``).
     """
     catalog: dict[str, Any] = {}
 
