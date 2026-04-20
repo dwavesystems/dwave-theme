@@ -11,3 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+import pytest
+import matplotlib.pyplot as plt
+
+
+@pytest.fixture(autouse=True)
+def reset_matplotlib_defaults():
+    """
+    Automatically resets matplotlib to default settings before and after each test.
+    """
+    plt.rcdefaults()
+    yield
+    plt.rcdefaults()
+    plt.close("all")
