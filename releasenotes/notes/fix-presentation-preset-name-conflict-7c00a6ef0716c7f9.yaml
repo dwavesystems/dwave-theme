@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Fixed a bug where the ``presentation`` preset name matched a style
+    component name, which caused a self-reference and raised an error when the
+    preset was loaded; the preset is now named ``presentation-light``.
