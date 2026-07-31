@@ -66,23 +66,32 @@ def test_catalog_loads_palettes():
             assert isinstance(prop_cycle, Cycler), "Expected a Cycler object."
 
 
-@pytest.mark.parametrize(
-    "preset_name", ["default", "dark", "presentation", "presentation-dark"]
-)
+def _preset_names():
+    """Return every preset name in the catalog."""
+    return [name for name, val in build_catalog().items() if isinstance(val, list)]
+
+
+@pytest.mark.parametrize("preset_name", _preset_names())
 def test_presets_reference_valid_components(preset_name):
-    """Ensure that all values inside a preset list reference a valid component."""
+    """Ensure each preset references existing components and not another preset."""
     catalog = build_catalog()
+    presets = set(_preset_names())
 
-    assert preset_name in catalog
-
-    preset_components = catalog[preset_name]
-    assert isinstance(preset_components, list)
-
-    for component in preset_components:
+    for component in catalog[preset_name]:
         assert component in catalog, (
             f"Preset '{preset_name}' relies on component '{component}', "
             f"but '{component}' is not in the catalog."
         )
+        assert component not in presets, (
+            f"Preset '{preset_name}' references '{component}', which is also a "
+            f"preset; presets must only reference components."
+        )
+
+
+@pytest.mark.parametrize("preset_name", _preset_names())
+def test_set_theme_applies_every_preset(preset_name):
+    """Verify every preset can be applied via ``set_theme()`` without error."""
+    set_theme(preset_name)
 
 
 def test_available_styles_returns_sorted_list():
@@ -94,13 +103,13 @@ def test_available_styles_returns_sorted_list():
 
 
 def test_set_theme_defaults():
-    """Test that `set_theme()` with no args applies the default preset."""
+    """Test that ``set_theme()`` with no args applies the default preset."""
     set_theme()
     assert plt.rcParams["figure.facecolor"] == _LIGHT_BG_PLOT
 
 
 def test_set_theme_dark_preset():
-    """Test applying a preset works."""
+    """Test applying a preset via ``set_theme()`` works."""
     set_theme("dark")
     assert plt.rcParams["figure.facecolor"] == _DARK_BG_PLOT
 
@@ -151,9 +160,7 @@ def test_context_manager_isolation():
 
 
 def test_show_palettes_runs_without_error(mocker):
-    """
-    Smoke test the palette visualizer.
-    """
+    """Smoke test the palette visualizer."""
     mpl.use("Agg")
     mock_show = mocker.patch("matplotlib.pyplot.show")
 
