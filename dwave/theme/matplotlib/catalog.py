@@ -62,7 +62,7 @@ def build_catalog() -> dict[str, Any]:
 
     catalog["dark"] = ["base", "typography", "theme-dark", "palette-qualitative-dark"]
 
-    catalog["presentation"] = [
+    catalog["presentation-light"] = [
         "base",
         "typography",
         "presentation",

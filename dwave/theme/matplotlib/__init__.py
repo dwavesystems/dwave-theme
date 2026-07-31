@@ -118,8 +118,8 @@ def context(*names: str):
         >>> dwave_theme.set_theme("dark")
         >>> plt.plot(data)
         >>>
-        >>> # Temporarily switch to `presentation` preset for a slide export
-        >>> with dwave_theme.context("presentation"):
+        >>> # Temporarily switch to `presentation-light` preset for a slide export
+        >>> with dwave_theme.context("presentation-light"):
         ...     plt.plot(data)
         ...     plt.savefig("slide.png")
         >>>
