@@ -24,6 +24,9 @@ test = [
     "pytest-mock"
 ]
 
+[tool.setuptools.packages.find]
+include = ["dwave*"]
+
 [tool.setuptools.package-data]
 "*" = ["*.mplstyle"]
 
