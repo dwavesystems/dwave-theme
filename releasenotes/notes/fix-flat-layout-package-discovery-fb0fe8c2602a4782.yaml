@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixed a build failure caused by setuptools treating ``releasenotes/`` as a
+    second top-level package; package discovery is now scoped to ``dwave*``.
