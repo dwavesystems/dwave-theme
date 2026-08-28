@@ -19,6 +19,11 @@ dependencies = [
 ]
 
 [dependency-groups]
+docs = [
+    "pydata-sphinx-theme==0.16.1",
+    "sphinx==8.2.3",
+    "sphinx-design==0.6.1",
+]
 test = [
     "pytest",
     "pytest-mock"
