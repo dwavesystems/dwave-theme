@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dwave-theme"
-version = "0.1.0"
+dynamic = ["version"]
 authors = [
-    {name = "D-Wave Inc.", email = "tools@dwavesys.com"},
+    {name = "D-Wave", email = "tools@dwavesys.com"},
 ]
 license = "Apache-2.0"
 license-files = ["LICEN[CS]E*"]
@@ -19,10 +19,18 @@ dependencies = [
 ]
 
 [dependency-groups]
+docs = [
+    "pydata-sphinx-theme==0.16.1",
+    "sphinx==8.2.3",
+    "sphinx-design==0.6.1",
+]
 test = [
     "pytest",
     "pytest-mock"
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "dwave.theme.__version__"}
 
 [tool.setuptools.packages.find]
 include = ["dwave.*"]
