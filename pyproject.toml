@@ -19,7 +19,15 @@ dependencies = [
 ]
 
 [dependency-groups]
+changelog = [
+    "reno>4",
+]
+dev = [
+    "dwave-theme",      # keep it simple here, sweep deps in CI
+    {include-group = "changelog"},
+]
 docs = [
+    # keep in sync with Ocean docs
     "pydata-sphinx-theme==0.16.1",
     "sphinx==8.2.3",
     "sphinx-design==0.6.1",
