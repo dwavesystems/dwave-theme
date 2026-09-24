@@ -48,3 +48,14 @@ intersphinx_mapping = {
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'dwave': ('https://docs.dwavequantum.com/en/latest/', None),
 }
+
+doctest_global_setup = """
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+"""
+
+doctest_global_cleanup = """
+import matplotlib.pyplot as plt
+plt.close("all")
+"""
