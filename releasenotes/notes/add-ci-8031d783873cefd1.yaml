@@ -1,0 +1,7 @@
+---
+other:
+  - Add CI configuration.
+  - Update package metadata (dependency groups required for CI).
+  - Fix doctests.
+  - Use a non-interactive matplotlib backend for docs build.
+  - Remove implicit dependency on numpy.
