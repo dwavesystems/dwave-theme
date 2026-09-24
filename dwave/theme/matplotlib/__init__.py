@@ -115,11 +115,13 @@ def context(*names: str):
     Examples:
         >>> # Global theme is dark
         >>> import dwave.theme.matplotlib as dwave_theme
+        >>> import matplotlib.pyplot as plt
+        ...
         >>> dwave_theme.set_theme("dark")
-        >>> plt.plot(data)
+        >>> plt.plot(data)      # doctest: +SKIP
         >>>
         >>> # Temporarily switch to `presentation-light` preset for a slide export
-        >>> with dwave_theme.context("presentation-light"):
+        >>> with dwave_theme.context("presentation-light"):     # doctest: +SKIP
         ...     plt.plot(data)
         ...     plt.savefig("slide.png")
         >>>
