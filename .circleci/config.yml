@@ -23,7 +23,7 @@ jobs:
             . env/bin/activate
             python --version
             pip install --upgrade pip
-            pip install . --group test
+            pip install --upgrade . --group test
 
       - run: &run-tests
           name: Run unittests
@@ -111,6 +111,31 @@ jobs:
           command: |
             env\Scripts\activate.ps1
             python -m pytest tests/
+
+  test-dependencies:
+    parameters:
+      python-version:
+        type: string
+      dependencies:
+        type: string
+
+    docker:
+      - image: python:<< parameters.python-version >>
+
+    steps:
+      - checkout
+
+      - run: *create-venv-install-deps
+
+      - run:
+          name: Pin dependencies
+          command: |
+            . env/bin/activate
+            if [[ "<< parameters.dependencies >>" ]]; then
+              pip install << parameters.dependencies >>
+            fi
+
+      - run: *run-tests
 
   test-docs:
     docker:
@@ -210,7 +235,7 @@ workflows:
       - test-linux:
           matrix:
             parameters:
-              python-version: &python-versions ["3.10", "3.11", "3.12", "3.13", "3.14"]
+              python-version: &python-versions [&py-oldest "3.10", "3.11", "3.12", "3.13", &py-latest "3.14"]
 
       - test-macos:
           matrix:
@@ -221,6 +246,16 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
+
+      - test-dependencies:
+          name: test-dependencies-oldest
+          python-version: *py-oldest
+          dependencies: "cycler==0.12.1 matplotlib==3.10.6"
+
+      - test-dependencies:
+          name: test-dependencies-latest
+          python-version: *py-latest
+          dependencies: ""
 
       - build-dist
       - test-docs

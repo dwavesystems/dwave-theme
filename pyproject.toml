@@ -23,7 +23,7 @@ changelog = [
     "reno>4",
 ]
 dev = [
-    "dwave-theme",      # keep it simple here, sweep deps in CI
+    # keep it simple here, sweep deps in CI
     {include-group = "changelog"},
 ]
 docs = [
