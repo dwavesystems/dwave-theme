@@ -29,7 +29,7 @@ author = 'D-Wave'
 version = __version__
 release = __version__
 
-exclude_patterns = ['_build']
+exclude_patterns = ['build']
 
 language = 'en'
 
