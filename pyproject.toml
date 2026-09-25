@@ -12,7 +12,7 @@ license = "Apache-2.0"
 license-files = ["LICEN[CS]E*"]
 description = "A centralized theme and configuration package for D-Wave projects."
 readme = {file = "README.rst", content-type = "text/x-rst"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "cycler>=0.12.1",
     "matplotlib>=3.10.6",

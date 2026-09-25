@@ -5,3 +5,4 @@ other:
   - Fix doctests.
   - Use a non-interactive matplotlib backend for docs build.
   - Remove implicit dependency on numpy.
+  - Drop Python 3.10 support.
