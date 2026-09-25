@@ -50,7 +50,7 @@ jobs:
       - checkout
 
       - restore_cache: &restore-cache-pyenv
-          key: &brew-pyenv-cache-key v1-brew-pyenv-{{ arch }}-<< parameters.python-version >>
+          key: &brew-pyenv-cache-key v1-brew-pyenv-{{ arch }}-<< parameters.xcode >>-<< parameters.python-version >>
 
       - run:
           name: Install Python << parameters.python-version >>
@@ -58,15 +58,16 @@ jobs:
             brew update
             brew install pyenv
             pyenv install << parameters.python-version >> -s
+            # set system-wide python
             pyenv global << parameters.python-version >>
-            echo 'eval "$(pyenv init -)"' >> "$BASH_ENV"
+            echo 'eval "$(pyenv init --path 2>/dev/null || true)"' >> ~/.bash_profile
+            echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
 
       - save_cache: &save-cache-pyenv
           key: *brew-pyenv-cache-key
           paths:
-            - /Users/distiller/Library/Caches/Homebrew
-            - /usr/local/Homebrew
-            - ~/.pyenv
+            - ~/Library/Caches/Homebrew
+            - ~/.pyenv/versions
 
       - run: *create-venv-install-deps
 
