@@ -12,21 +12,30 @@ license = "Apache-2.0"
 license-files = ["LICEN[CS]E*"]
 description = "A centralized theme and configuration package for D-Wave projects."
 readme = {file = "README.rst", content-type = "text/x-rst"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "cycler>=0.12.1",
     "matplotlib>=3.10.6",
 ]
 
 [dependency-groups]
+changelog = [
+    "reno>4",
+]
+dev = [
+    # keep it simple here, sweep deps in CI
+    {include-group = "changelog"},
+]
 docs = [
+    # keep in sync with Ocean docs
     "pydata-sphinx-theme==0.16.1",
     "sphinx==8.2.3",
     "sphinx-design==0.6.1",
 ]
 test = [
+    "coverage",
     "pytest",
-    "pytest-mock"
+    "pytest-mock",
 ]
 
 [tool.setuptools.dynamic]

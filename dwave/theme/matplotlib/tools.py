@@ -14,8 +14,8 @@
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-import numpy as np
 from matplotlib.axes import Axes
+
 from dwave.theme.core.colors import PALETTES
 
 
@@ -26,7 +26,7 @@ def _plot_swatches(ax: Axes, colors: list[str], title: str) -> None:
     ax.imshow([rgb_values], aspect="auto")
 
     ax.set_yticks([])
-    ax.set_xticks(np.arange(len(colors)))
+    ax.set_xticks(range(len(colors)))
     ax.set_xticklabels(colors, rotation=90, fontsize=8)
     ax.set_title(title, loc="left", fontsize=10, fontweight="bold")
 
