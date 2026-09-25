@@ -215,7 +215,7 @@ jobs:
           command: |
             python -m venv env
             . env/bin/activate
-            pip install dwave-theme -f dist/
+            pip install --pre dwave-theme --no-index -f dist/
 
       - run:
           name: Verify version matches tag
