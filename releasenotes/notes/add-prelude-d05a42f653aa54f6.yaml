@@ -1,0 +1,15 @@
+---
+prelude: >
+    First release of ``dwave-theme``, a centralized theme and configuration
+    package for creating unified, D-Wave-branded visualizations across D-Wave
+    projects.
+features:
+  - |
+    Add a central repository of D-Wave brand colors in ``dwave.theme.core``,
+    with qualitative and sequential palettes, each in light and dark variants.
+  - |
+    Add matplotlib style presets in ``dwave.theme.matplotlib``: ``default``
+    (alias ``light``), ``dark``, ``presentation-light``, and
+    ``presentation-dark``, as well as composable components (``base``,
+    ``typography``, ``transparent``, ``theme-*``, and ``palette-*``) for
+    building custom looks.
