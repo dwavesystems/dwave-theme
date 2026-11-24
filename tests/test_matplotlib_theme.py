@@ -12,19 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.pyplot as plt
+import pytest
 from cycler import Cycler
 
 from dwave.theme.core.colors import (
-    _LIGHT_BG_PLOT,
-    _DARK_BG_PLOT,
-    _DARK_TEXT_PRIMARY,
+    DARK_BG_PLOT,
+    DARK_TEXT_PRIMARY,
+    LIGHT_BG_PLOT,
     PALETTES,
     THEMES,
 )
-from dwave.theme.matplotlib import available_styles, set_theme, context, show_palettes
+from dwave.theme.core.typography import FONT_SANS_SERIF
+from dwave.theme.matplotlib import available_styles, context, set_theme, show_palettes
 from dwave.theme.matplotlib.catalog import build_catalog
 
 
@@ -36,15 +37,17 @@ def test_catalog_loads_static_files():
     for style in mpl_static:
         assert style in catalog, f"Style '{style}' is missing from the catalog."
 
+    assert catalog["typography"]["font.sans-serif"] == list(FONT_SANS_SERIF)
+
 
 def test_catalog_loads_themes():
     """Verify themes are correctly loaded into the catalog."""
     catalog = build_catalog()
 
-    for theme_name in THEMES.keys():
-        assert f"theme-{theme_name}" in catalog, (
-            f"Theme theme-{theme_name} failed to load."
-        )
+    for theme_name in THEMES:
+        key = f"theme-{theme_name}"
+        assert key in catalog, f"Theme {key} failed to load."
+        assert set(catalog[key]).issubset(mpl.rcParams)
 
 
 def test_catalog_loads_palettes():
@@ -52,7 +55,7 @@ def test_catalog_loads_palettes():
     catalog = build_catalog()
 
     for kind, variants in PALETTES.items():
-        for variant in variants.keys():
+        for variant in variants:
             expected_key = f"palette-{kind}-{variant}"
 
             assert expected_key in catalog, f"Palette {expected_key} failed to load."
@@ -105,13 +108,13 @@ def test_available_styles_returns_sorted_list():
 def test_set_theme_defaults():
     """Test that ``set_theme()`` with no args applies the default preset."""
     set_theme()
-    assert plt.rcParams["figure.facecolor"] == _LIGHT_BG_PLOT
+    assert plt.rcParams["figure.facecolor"] == LIGHT_BG_PLOT
 
 
 def test_set_theme_dark_preset():
     """Test applying a preset via ``set_theme()`` works."""
     set_theme("dark")
-    assert plt.rcParams["figure.facecolor"] == _DARK_BG_PLOT
+    assert plt.rcParams["figure.facecolor"] == DARK_BG_PLOT
 
 
 def test_set_theme_invalid_name():
@@ -126,7 +129,7 @@ def test_set_theme_composition():
     set_theme("base", "theme-light")
 
     assert plt.rcParams["axes.grid"] is False
-    assert plt.rcParams["figure.facecolor"] == _LIGHT_BG_PLOT
+    assert plt.rcParams["figure.facecolor"] == LIGHT_BG_PLOT
 
 
 def test_transparent_style_application():
@@ -144,7 +147,7 @@ def test_transparent_composition():
     """
     set_theme("dark", "transparent")
     assert plt.rcParams["figure.facecolor"] == "none"
-    assert plt.rcParams["text.color"] == _DARK_TEXT_PRIMARY
+    assert plt.rcParams["text.color"] == DARK_TEXT_PRIMARY
 
 
 def test_context_manager_isolation():
@@ -153,7 +156,7 @@ def test_context_manager_isolation():
     original_bg = plt.rcParams["figure.facecolor"]
 
     with context("dark"):
-        assert plt.rcParams["figure.facecolor"] == _DARK_BG_PLOT
+        assert plt.rcParams["figure.facecolor"] == DARK_BG_PLOT
 
     # check revert after context use
     assert plt.rcParams["figure.facecolor"] == original_bg

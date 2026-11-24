@@ -15,24 +15,38 @@
 from importlib import resources
 from typing import Any
 
-from cycler import cycler
 import matplotlib
+from cycler import cycler
 
+from dwave.theme.core.catalog import PRESETS
 from dwave.theme.core.colors import PALETTES, THEMES
-
 
 STYLE_RESOURCE = resources.files(__package__) / "styles"
 
 
+def _build_theme(theme: dict[str, str]) -> dict[str, str]:
+    """Maps semantic core theme colors to Matplotlib ``rcParams`` keys."""
+    return {
+        "figure.facecolor": theme["bg_canvas"],
+        "axes.facecolor": theme["bg_plot"],
+        "text.color": theme["text_primary"],
+        "axes.labelcolor": theme["axis_label"],
+        "xtick.color": theme["text_secondary"],
+        "ytick.color": theme["text_secondary"],
+        "grid.color": theme["grid"],
+        "axes.edgecolor": theme["axis_line"],
+    }
+
+
 def build_catalog() -> dict[str, Any]:
-    """Constructs the dictionary of all available style components.
+    """Constructs the dictionary of all available style components and presets.
 
     This mixes static ``.mplstyle`` files with dynamic dictionaries generated from the core color
     definitions.
 
     Returns:
-        dict[str, Any]: A registry where keys are style names and values are either ``Path`` objects
-        (to ``.mplstyle`` files) or dictionaries (``rcParams``).
+        dict[str, Any]: A registry where keys are style names and values are either ``rcParams``
+        dictionaries (components) or component-name lists (presets).
     """
     catalog: dict[str, Any] = {}
 
@@ -43,40 +57,15 @@ def build_catalog() -> dict[str, Any]:
                 catalog[name] = _load_mplstyle_resource(resource)
 
     for name, settings in THEMES.items():
-        catalog[f"theme-{name}"] = settings
+        catalog[f"theme-{name}"] = _build_theme(settings)
 
     for kind, variants in PALETTES.items():
         for variant, colors in variants.items():
             key = f"palette-{kind}-{variant}"
             catalog[key] = {"axes.prop_cycle": cycler(color=colors)}
 
-    # Define presets
-    catalog["default"] = [
-        "base",
-        "typography",
-        "theme-light",
-        "palette-qualitative-light",
-    ]
-
-    catalog["light"] = catalog["default"].copy()
-
-    catalog["dark"] = ["base", "typography", "theme-dark", "palette-qualitative-dark"]
-
-    catalog["presentation-light"] = [
-        "base",
-        "typography",
-        "presentation",
-        "theme-light",
-        "palette-qualitative-light",
-    ]
-
-    catalog["presentation-dark"] = [
-        "base",
-        "typography",
-        "presentation",
-        "theme-dark",
-        "palette-qualitative-dark",
-    ]
+    for name, components in PRESETS.items():
+        catalog[name] = components.copy()
 
     return catalog
 
@@ -84,4 +73,5 @@ def build_catalog() -> dict[str, Any]:
 def _load_mplstyle_resource(resource: Any) -> dict[str, Any]:
     """Loads a packaged ``.mplstyle`` resource into an ``rcParams`` dictionary."""
     with resources.as_file(resource) as path:
-        return dict(matplotlib.rc_params_from_file(path, use_default_template=False))
+        rc_params = matplotlib.rc_params_from_file(path, use_default_template=False)
+        return dict(rc_params.items())
