@@ -13,10 +13,11 @@
 # limitations under the License.
 
 import re
+
 import pytest
 
-from dwave.theme.core.colors import PALETTES, THEMES
-
+from dwave.theme.core.catalog import PRESETS, available_styles, resolve_styles
+from dwave.theme.core.colors import PALETTES, THEMES, get_palettes
 
 # A regex to ensure valid hex codes. Allows for optional transparency too, see:
 # https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
@@ -35,23 +36,22 @@ def test_palettes_structure(palette_type, variant):
     assert isinstance(color_list, list)
     assert len(color_list) > 0
 
-    for i, color in enumerate(color_list):
+    for color in color_list:
         assert isinstance(color, str)
         assert HEX_COLOR_PATTERN.match(color)
 
 
 @pytest.mark.parametrize("variant", ["light", "dark"])
 def test_themes_structure(variant):
-    """Ensure UI themes have the required keys and valid color values."""
+    """Ensure semantic UI themes have the required keys and valid color values."""
     required_keys = [
-        "figure.facecolor",
-        "axes.facecolor",
-        "text.color",
-        "axes.labelcolor",
-        "xtick.color",
-        "ytick.color",
-        "grid.color",
-        "axes.edgecolor",
+        "bg_canvas",
+        "bg_plot",
+        "text_primary",
+        "text_secondary",
+        "axis_label",
+        "grid",
+        "axis_line",
     ]
 
     assert variant in THEMES
@@ -62,6 +62,51 @@ def test_themes_structure(variant):
 
     assert len(theme_dict) == len(required_keys)
 
-    for key, color_value in theme_dict.items():
+    for color_value in theme_dict.values():
         assert isinstance(color_value, str)
         assert HEX_COLOR_PATTERN.match(color_value)
+
+
+def test_get_palettes_all_and_filtered():
+    """Ensure ``get_palettes`` returns all palettes or filters by category."""
+    all_palettes = get_palettes()
+    assert len(all_palettes) == sum(len(v) for v in PALETTES.values())
+
+    qual_palettes = get_palettes("qualitative")
+    assert [label for label, _ in qual_palettes] == [
+        "qualitative : light",
+        "qualitative : dark",
+    ]
+
+    with pytest.raises(ValueError, match="Palette category 'unknown' not found"):
+        get_palettes("unknown")
+
+
+def test_resolve_styles_unpacks_presets_and_validates():
+    """Ensure ``resolve_styles`` defaults to 'default', unpacks presets, and rejects bad inputs."""
+    sample_catalog = {
+        "base": {"base": 1},
+        "typography": {"font": "sans"},
+        "theme-light": {"bg": "#fff"},
+        "palette-qualitative-light": {"colors": ["#000"]},
+        "default": list(PRESETS["default"]),
+        "nested": ["default"],
+    }
+
+    assert available_styles(sample_catalog) == sorted(sample_catalog.keys())
+    assert resolve_styles(sample_catalog, ()) == [
+        {"base": 1},
+        {"font": "sans"},
+        {"bg": "#fff"},
+        {"colors": ["#000"]},
+    ]
+    assert resolve_styles(sample_catalog, ("base", "theme-light")) == [
+        {"base": 1},
+        {"bg": "#fff"},
+    ]
+
+    with pytest.raises(ValueError, match="Style 'missing' not found"):
+        resolve_styles(sample_catalog, ("missing",))
+
+    with pytest.raises(TypeError, match="cannot reference another preset"):
+        resolve_styles(sample_catalog, ("nested",))

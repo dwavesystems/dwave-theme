@@ -1,0 +1,14 @@
+---
+features:
+  - |
+    Expose D-Wave brand and UI neutral color constants publicly in
+    ``dwave.theme.core.colors`` alongside a shared ``get_palettes()`` helper,
+    font stack constant (``dwave.theme.core.typography``), and catalog/preset
+    helpers (``dwave.theme.core.catalog``).
+upgrade:
+  - |
+    ``dwave.theme.core.colors.THEMES`` now uses backend neutral semantic keys
+    (``bg_canvas``, ``bg_plot``, ``text_primary``, ``text_secondary``,
+    ``axis_label``, ``grid``, ``axis_line``) instead of Matplotlib ``rcParams``
+    keys. Matplotlib ``rcParams`` mapping is now handled in
+    ``dwave.theme.matplotlib.catalog``.

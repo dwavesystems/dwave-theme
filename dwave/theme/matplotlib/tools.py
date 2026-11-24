@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 
-from dwave.theme.core.colors import PALETTES
+from dwave.theme.core.colors import get_palettes
 
 
 def _plot_swatches(ax: Axes, colors: list[str], title: str) -> None:
@@ -55,25 +55,7 @@ def show_palettes(category: str | None = None) -> None:
         >>> # Show only qualitative palettes
         >>> show_palettes("qualitative")
     """
-    if category:
-        if category not in PALETTES:
-            raise ValueError(
-                f"Palette category '{category}' not found. "
-                f"Available: {sorted(PALETTES.keys())}"
-            )
-        target_cats = [category]
-    else:
-        target_cats = sorted(PALETTES.keys())
-
-    plot_list = []
-    for cat in target_cats:
-        variants = PALETTES[cat]
-        for variant_name, colors in variants.items():
-            full_name = f"{cat} : {variant_name}"
-            plot_list.append((full_name, colors))
-
-    if not plot_list:
-        raise ValueError("No palettes found to display.")
+    plot_list = get_palettes(category)
 
     n_plots = len(plot_list)
     _, axes = plt.subplots(n_plots, 1, figsize=(8, 1.5 * n_plots), dpi=150)
